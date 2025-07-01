@@ -73,8 +73,13 @@ jobs:
           echo "VERSION=${{ github.run_id }}-$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
       # run the policy scan action
+      - name: Checkout repository
+        uses: actions/checkout@v3 
       - name: Veracode Upload and Scan Action Step
-        uses: veracode/uploadandscan-action@v0.1.7
+        env:
+          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
+          JAVA_OPTS: -Xms2g -Xmx4g
+        uses: ./actions/uploadandscan-action
         id: upload_and_scan
         with:
           appname: ${{ inputs.profile_name }}
