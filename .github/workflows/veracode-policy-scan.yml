@@ -179,7 +179,7 @@ jobs:
           path: /tmp
 
       - name: Create flaws as issues
-        uses: veracode/veracode-flaws-to-issues@v2.2.25 #Hard to convert, need to focus on this.
+        uses: veracode/veracode-flaws-to-issues@v2.2.25
         with:
           scan-results-json: '/tmp/policy_flaws.json'
           repo_owner: ${{ inputs.owner }}
