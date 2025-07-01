@@ -101,10 +101,12 @@ jobs:
           echo "Current Matrix: ${{ matrix }}"
           echo "Current File: ${{ matrix.file }}"
 
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available
       - name: Veracode Pipeline-Scan
         if: always()
         id: pipeline-scan
-        uses: veracode/Veracode-pipeline-scan-action@v1.0.18
+        uses: ./actions/Veracode-pipeline-scan-action
         with:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
@@ -119,10 +121,12 @@ jobs:
           artifact_name: ${{ matrix.file }}
           debug: 1
     
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available    
       - name: Veracode Pipeline Results
         if: always()
         id: prepare-results
-        uses: veracode/github-actions-integration-helper@v0.1.7
+        uses: ./actions/github-actions-integration-helper
         with:
           action: 'preparePipelineResults'
           token: ${{ inputs.token }}
@@ -136,9 +140,11 @@ jobs:
           filter_mitigated_flaws: ${{ inputs.filter_mitigated_flaws }}
           filtered_results_file: ${{ strategy.job-index }}-filtered_results.json
 
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available   
       - name: Convert pipeline scan output to SARIF format
         if: ${{ inputs.create_code_scanning_alert && always() }}
-        uses: Veracode/veracode-pipeline-scan-results-to-sarif@v2.0.4
+        uses: ./actions/veracode-pipeline-scan-results-to-sarif
         with:
           pipeline-results-json: mitigated_${{ strategy.job-index }}-filtered_results.json
           output-results-sarif: veracode-results.sarif
@@ -150,7 +156,7 @@ jobs:
 
       - name: Create flaws as issues
         if: ${{ inputs.create_issue && always() }}
-        uses: veracode/veracode-flaws-to-issues@v2.2.25
+        uses: veracode/veracode-flaws-to-issues@v2.2.25 # Hard to Convert. need to focus on this.
         with:
           scan-results-json: mitigated_${{ strategy.job-index }}-filtered_results.json
           repo_owner: ${{ inputs.owner }}

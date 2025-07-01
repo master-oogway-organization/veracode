@@ -76,9 +76,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3 
       - name: Veracode Upload and Scan Action Step
-        env:
-          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
-          JAVA_OPTS: -Xms2g -Xmx4g
         uses: ./actions/uploadandscan-action
         id: upload_and_scan
         with:
@@ -100,9 +97,6 @@ jobs:
       - name: Veracode Policy Results
         id: prepare-results
         if: always()
-        env:
-          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
-          JAVA_OPTS: -Xms2g -Xmx4g
         uses: ./actions/github-actions-integration-helper
         with:
           action: 'preparePolicyResults'
@@ -126,9 +120,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3  # Make sure repo files are available
-        env:
-          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
-          JAVA_OPTS: -Xms2g -Xmx4g
       - uses: ./actions/github-actions-integration-helper
         with:
           action: 'removeSandbox'
@@ -158,9 +149,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3 
       - name: Convert policy scan output to SARIF format
-        env:
-          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
-          JAVA_OPTS: -Xms2g -Xmx4g
         uses: ./actions/veracode-pipeline-scan-results-to-sarif
         with:
           scan-type: policy
