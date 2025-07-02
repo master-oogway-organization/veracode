@@ -178,8 +178,10 @@ jobs:
           name: 'policy-flaws'
           path: /tmp
 
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available          
       - name: Create flaws as issues
-        uses: veracode/veracode-flaws-to-issues@v2.2.25
+        uses: ./actions/veracode-flaws-to-issues@v2.2.25
         with:
           scan-results-json: '/tmp/policy_flaws.json'
           repo_owner: ${{ inputs.owner }}
