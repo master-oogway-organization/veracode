@@ -24,9 +24,11 @@ jobs:
           name: ${{ github.event.client_payload.repository.artifact_file }}
           path: ./veracode_artifact_directory
 
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available
       - name: Veracode Upload and Scan Action Step
         id: upload_and_scan
-        uses: veracode/uploadandscan-action@v0.1.7
+        uses: ./actions/uploadandscan-action
         with:
           appname: ${{ github.event.client_payload.user_config.profile_name }}
           createprofile: true

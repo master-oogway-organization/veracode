@@ -72,9 +72,6 @@ jobs:
       - name: Verify Policy name
         id: verify_policy_name
         if: success()
-        env:
-          SRCCLR_API_TOKEN: ${{ secrets.VERACODE_AGENT_TOKEN }}
-          JAVA_OPTS: -Xms2g -Xmx4g
         uses: ./actions/github-actions-integration-helper
         with:
           action: validatePolicyName

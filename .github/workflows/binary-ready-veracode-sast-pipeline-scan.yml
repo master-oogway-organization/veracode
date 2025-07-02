@@ -28,9 +28,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Validations
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available
       - name: Verify Veracode API credentials
         id: verify_api_creds
-        uses: veracode/github-actions-integration-helper@v0.1.7
+        uses: ./actions/github-actions-integration-helper
         with:
           action: validateVeracodeApiCreds
           token: ${{ github.event.client_payload.token }}
@@ -40,10 +42,12 @@ jobs:
           source_repository: ${{ github.event.client_payload.repository.full_name }}
           check_run_id: ${{ needs.register.outputs.run_id }}
 
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available
       - name: Verify Policy name
         id: verify_policy_name
         if: success()
-        uses: veracode/github-actions-integration-helper@v0.1.7
+        uses: ./actions/github-actions-integration-helper
         with:
           action: validatePolicyName
           token: ${{ github.event.client_payload.token }}
@@ -116,10 +120,12 @@ jobs:
           echo "Current File: ${{ matrix.file }}"
 
       # run the pipeline scan action
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available
       - name: Veracode Pipeline-Scan
         if: always()
         id: pipeline-scan
-        uses: veracode/Veracode-pipeline-scan-action@v1.0.18
+        uses: ./actions/Veracode-pipeline-scan-action
         with:
           vid: ${{ secrets.VERACODE_API_ID }}
           vkey: ${{ secrets.VERACODE_API_KEY }}
@@ -133,11 +139,13 @@ jobs:
           filtered_json_output_file: ${{ strategy.job-index }}-filtered_results.json
           artifact_name: ${{ matrix.file }}
           debug: 1
-    
+
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available
       - name: Veracode Pipeline Results
         if: always()
         id: prepare-results
-        uses: veracode/github-actions-integration-helper@v0.1.7
+        uses: ./actions/github-actions-integration-helper
         with:
           action: 'preparePipelineResults'
           token: ${{ github.event.client_payload.token }}
@@ -151,9 +159,11 @@ jobs:
           filter_mitigated_flaws: ${{ github.event.client_payload.user_config.filter_mitigated_flaws }}
           filtered_results_file: ${{ strategy.job-index }}-filtered_results.json
 
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available          
       - name: Convert pipeline scan output to SARIF format
         if: ${{ github.event.client_payload.user_config.create_code_scanning_alert && always() }}
-        uses: Veracode/veracode-pipeline-scan-results-to-sarif@v2.0.4
+        uses: ./actions/veracode-pipeline-scan-results-to-sarif
         with:
           pipeline-results-json: mitigated_${{ strategy.job-index }}-filtered_results.json
           output-results-sarif: veracode-results.sarif
@@ -163,9 +173,11 @@ jobs:
           ref: ${{ github.event.client_payload.user_config.ref }}
           githubToken: ${{ github.event.client_payload.token }}
 
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Make sure repo files are available
       - name: Create flaws as issues
         if: ${{ github.event.client_payload.user_config.create_issue && always() }}
-        uses: veracode/veracode-flaws-to-issues@v2.2.25
+        uses: ./actions/veracode-flaws-to-issues
         with:
           scan-results-json: mitigated_${{ strategy.job-index }}-filtered_results.json
           repo_owner: ${{ github.event.client_payload.repository.owner }}
