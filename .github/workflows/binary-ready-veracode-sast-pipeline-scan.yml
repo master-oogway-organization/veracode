@@ -29,7 +29,7 @@ jobs:
     name: Validations
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - name: Verify Veracode API credentials
         id: verify_api_creds
         uses: ./actions/github-actions-integration-helper
@@ -43,7 +43,7 @@ jobs:
           check_run_id: ${{ needs.register.outputs.run_id }}
 
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - name: Verify Policy name
         id: verify_policy_name
         if: success()
@@ -121,7 +121,7 @@ jobs:
 
       # run the pipeline scan action
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - name: Veracode Pipeline-Scan
         if: always()
         id: pipeline-scan
@@ -141,7 +141,7 @@ jobs:
           debug: 1
 
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - name: Veracode Pipeline Results
         if: always()
         id: prepare-results
@@ -160,7 +160,7 @@ jobs:
           filtered_results_file: ${{ strategy.job-index }}-filtered_results.json
 
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available          
+        uses: actions/checkout@v4  # Make sure repo files are available          
       - name: Convert pipeline scan output to SARIF format
         if: ${{ github.event.client_payload.user_config.create_code_scanning_alert && always() }}
         uses: ./actions/veracode-pipeline-scan-results-to-sarif
@@ -174,7 +174,7 @@ jobs:
           githubToken: ${{ github.event.client_payload.token }}
 
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - name: Create flaws as issues
         if: ${{ github.event.client_payload.user_config.create_issue && always() }}
         uses: ./actions/veracode-flaws-to-issues

@@ -13,7 +13,7 @@ jobs:
     name: register
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # Make sure repo files are available
+      uses: actions/checkout@v4  # Make sure repo files are available
     - name: Register build
       id: register-build
       uses: ./actions/github-actions-integration-helper

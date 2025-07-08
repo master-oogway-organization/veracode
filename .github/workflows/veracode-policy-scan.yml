@@ -74,7 +74,7 @@ jobs:
 
       # run the policy scan action
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - name: Veracode Upload and Scan Action Step
         uses: ./actions/uploadandscan-action
         id: upload_and_scan
@@ -93,7 +93,7 @@ jobs:
           gitRepositoryUrl: ${{ github.server_url }}/${{ inputs.source_repository }}
 
       - name: Checkout repository
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v4 
       - name: Veracode Policy Results
         id: prepare-results
         if: always()
@@ -119,7 +119,7 @@ jobs:
     name: Remove Sandbox
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - uses: ./actions/github-actions-integration-helper
         with:
           action: 'removeSandbox'
@@ -147,7 +147,7 @@ jobs:
           path: /tmp
 
       - name: Checkout repository
-        uses: actions/checkout@v3 
+        uses: actions/checkout@v4 
       - name: Convert policy scan output to SARIF format
         uses: ./actions/veracode-pipeline-scan-results-to-sarif
         with:
@@ -179,7 +179,7 @@ jobs:
           path: /tmp
 
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available          
+        uses: actions/checkout@v4 # Make sure repo files are available          
       - name: Create flaws as issues
         uses: ./actions/veracode-flaws-to-issues
         with:

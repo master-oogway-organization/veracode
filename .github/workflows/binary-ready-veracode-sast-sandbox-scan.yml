@@ -25,7 +25,7 @@ jobs:
           path: ./veracode_artifact_directory
 
       - name: Checkout repository
-        uses: actions/checkout@v3  # Make sure repo files are available
+        uses: actions/checkout@v4  # Make sure repo files are available
       - name: Veracode Upload and Scan Action Step
         id: upload_and_scan
         uses: ./actions/uploadandscan-action
