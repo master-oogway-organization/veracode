@@ -72,6 +72,11 @@ jobs:
         run: |
           echo "VERSION=${{ github.run_id }}-$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
+      - name: Debug artifact directory
+        run: |
+          if [ -d "./veracode_artifact_directory" ]; then echo "Artifact directory exists."; else echo "Missing artifact directory!"; fi
+          ls -al ./veracode_artifact_directory || true
+
       # run the policy scan action
       - name: Checkout repository
         uses: actions/checkout@v4  # Make sure repo files are available
